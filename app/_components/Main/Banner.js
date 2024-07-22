@@ -54,7 +54,11 @@ const DraggableBanner = ({
         width={150}
         height={150}
         alt={`Banner ${item.id}`}
-        className="w-[300px]"
+        className="w-[150px]"
+      />
+      <input
+      type="file"
+      
       />
       <input
         type="text"
@@ -132,7 +136,7 @@ const BannerCarousel = () => {
     }));
 
     try {
-      const response = await axios.put("http://localhost:8080/banner/update/", {
+      const response = await axios.put("http://213.230.91.55:8110/banner/update/", {
         options: updateData,
       });
 
