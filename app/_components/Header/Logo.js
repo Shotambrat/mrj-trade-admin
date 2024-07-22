@@ -63,15 +63,15 @@ function Logo({ logoUrl, id }) {
       </Link>
       {showButtons && (
         <div className="absolute top-0 right-0 flex gap-2">
-          <button onClick={handleEditClick} className="rounded-full bg-gray-200 p-1">Edit</button>
+          <button onClick={handleEditClick} className="rounded-full bg-greenView text-white px-2 py-1 ">Edit</button>
         </div>
       )}
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50">
-          <div className="bg-white p-4 rounded">
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50 z-[9999]">
+          <div className="bg-white p-4 rounded flex gap-2 items-center">
             <input type="file" onChange={handleFileChange} />
-            <button onClick={handleSubmit} className="bg-blue-500 text-white p-2 mt-2">Upload</button>
-            <button onClick={() => setShowModal(false)} className="bg-gray-500 text-white p-2 mt-2">Close</button>
+            <button onClick={handleSubmit} className="bg-blue-500 rounded-lg text-white p-2 mt-2">Upload</button>
+            <button onClick={() => setShowModal(false)} className="bg-gray-500 rounded-lg text-white p-2 mt-2">Close</button>
           </div>
         </div>
       )}
