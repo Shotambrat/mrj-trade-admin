@@ -12,6 +12,7 @@ import Dropdown from "./DropDown";
 import tableCatalog from "@/public/svg/table-catalog.svg";
 import Image from "next/image";
 import Category from "../Modal/Category";
+import ProductsMain from "../AdminModal/Products/ProductsMain";
 
 export default function List() {
   const [categoryModal, setCategoryModal] = useState(false);
@@ -333,12 +334,15 @@ export default function List() {
     },
   ];
 
+  const [productModal, setProductModal] = useState(false)
+
   const handleClose = () => {
     setCategoryModal(false);
   }
 
   return (
     <div className="w-full max-w-[1440px] mx-auto flex flex-col lg:gap-20 gap-5 px-2">
+      {productModal && <ProductsMain setProductModal={setProductModal} />}
       {categoryModal && <Category handleClose={handleClose} />}
       <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-5">
         <h1 className="text-3xl max-mdx:text2xl font-semibold">CATALOG</h1>
@@ -377,6 +381,9 @@ export default function List() {
               />
             </div>
           ))}
+          <button onClick={() => setProductModal(true)} className="border-green-500 border-dashed border-4 flex justify-center items-center text-8xl text-green-500 font-bold">
+            +
+          </button>
         </div>
       </div>
     </div>
