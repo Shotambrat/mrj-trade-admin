@@ -1,11 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const brands = [
-  { id: 0, name: "Mindray" },
-  { id: 1, name: "Brand A" },
-  { id: 2, name: "Brand B" },
-];
+const formatNumber = (number) => {
+  return new Intl.NumberFormat('ru-RU').format(Math.round(number));
+};
 
 export default function ProductInfo({
   emptyProduct,
@@ -13,10 +11,39 @@ export default function ProductInfo({
   closeModal,
 }) {
   const [product, setProduct] = useState(emptyProduct);
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+
+  useEffect(() => {
+    // Fetch brands
+    fetch("http://213.230.91.55:8110/partner/get-all-partner-name")
+      .then((response) => response.json())
+      .then((data) => setBrands(data.data));
+
+    // Fetch categories
+    fetch("http://213.230.91.55:8110/category")
+      .then((response) => response.json())
+      .then((data) => setCategories(data.data.item));
+  }, []);
+
+  useEffect(() => {
+    const selectedCategory = categories.find(
+      (category) => category.title === product.category
+    );
+    setSubcategories(selectedCategory ? selectedCategory.catalog : []);
+  }, [product.category, categories]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProduct({ ...product, [name]: value });
+  };
+
+  const handleTagChange = (tag) => {
+    const newTags = product.tag.includes(tag)
+      ? product.tag.filter((t) => t !== tag)
+      : [...product.tag.filter((t) => t !== "Promotion"), tag]; // Only allow one tag if Promotion is selected
+    setProduct({ ...product, tag: newTags });
   };
 
   const handleSave = () => {
@@ -24,11 +51,16 @@ export default function ProductInfo({
     closeModal();
   };
 
-  const handleTagChange = (tag) => {
-    const newTags = product.tag.includes(tag)
-      ? product.tag.filter((t) => t !== tag)
-      : [...product.tag, tag];
-    setProduct({ ...product, tag: newTags });
+  const handleDiscountChange = (e) => {
+    const { value } = e.target;
+    const discount = parseFloat(value) || 0;
+    const originalPrice = parseFloat(product.originalPrice) || 0;
+    const discountPrice = originalPrice - (originalPrice * discount) / 100;
+    setProduct({
+      ...product,
+      discount: value,
+      priceWithDiscount: formatNumber(discountPrice),
+    });
   };
 
   return (
@@ -51,23 +83,33 @@ export default function ProductInfo({
           </label>
           <label>
             Product Category
-            <input
-              type="text"
+            <select
               name="category"
               value={product.category}
               onChange={handleInputChange}
               className="border p-2 rounded w-full"
-            />
+            >
+              {categories.map((category) => (
+                <option key={category.id} value={category.title}>
+                  {category.title}
+                </option>
+              ))}
+            </select>
           </label>
           <label>
             Product Subcategory
-            <input
-              type="text"
+            <select
               name="subcategory"
               value={product.subcategory}
               onChange={handleInputChange}
               className="border p-2 rounded w-full"
-            />
+            >
+              {subcategories.map((sub) => (
+                <option key={sub.id} value={sub.name}>
+                  {sub.name}
+                </option>
+              ))}
+            </select>
           </label>
           <label>
             Tag
@@ -94,6 +136,40 @@ export default function ProductInfo({
               </button>
             </div>
           </label>
+          {product.tag.includes("Promotion") && (
+            <>
+              <label>
+                Amount of discount (%)
+                <input
+                  type="number"
+                  name="discount"
+                  value={product.discount || ""}
+                  onChange={handleDiscountChange}
+                  className="border p-2 rounded w-full"
+                />
+              </label>
+              <label>
+                Original price (у.е.)
+                <input
+                  type="number"
+                  name="originalPrice"
+                  value={product.originalPrice || ""}
+                  onChange={handleInputChange}
+                  className="border p-2 rounded w-full"
+                />
+              </label>
+              <label>
+                Price with discount (у.е.)
+                <input
+                  type="text"
+                  name="priceWithDiscount"
+                  value={product.priceWithDiscount || ""}
+                  readOnly
+                  className="border p-2 rounded w-full bg-gray-100"
+                />
+              </label>
+            </>
+          )}
           <label>
             Brand
             <select
@@ -102,14 +178,17 @@ export default function ProductInfo({
               onChange={(e) =>
                 setProduct({
                   ...product,
-                  brand: { id: Number(e.target.value) },
+                  brand: {
+                    id: Number(e.target.value),
+                    ...brands.find((brand) => brand.id === Number(e.target.value)),
+                  },
                 })
               }
               className="border p-2 rounded w-full"
             >
               {brands.map((brand) => (
                 <option key={brand.id} value={brand.id}>
-                  {brand.name}
+                  {brand.title}
                 </option>
               ))}
             </select>
@@ -145,4 +224,4 @@ export default function ProductInfo({
       </div>
     </div>
   );
-} 
+}

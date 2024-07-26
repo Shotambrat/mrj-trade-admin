@@ -18,6 +18,10 @@ export default function ProductsMain() {
     conditions: "Technical support",
     brand: {
       id: 0,
+      title: "",
+      photo: {
+        url: "",
+      },
     },
     catalog: {
       id: 0,
@@ -32,7 +36,7 @@ export default function ProductsMain() {
   const [productGallery, setProductGallery] = useState([]);
 
   return (
-    <div className="fixed inset-0 z-[9999] h-screen w-screen bg-white flex">
+    <div className="fixed inset-0 z-[9999] h-screen w-screen bg-white flex ">
       <CreatedList />
       <ProductPreview
         productGallery={productGallery}
