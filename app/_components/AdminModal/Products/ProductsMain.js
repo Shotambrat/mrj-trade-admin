@@ -9,32 +9,37 @@ export default function ProductsMain() {
   const [idCount, setIdCount] = useState(1);
   const [emptyProduct, setEmptyProduct] = useState({
     id: idCount,
-    name: "",
-    tag: [],
-    description: "",
+    name: "Title",
+    tag: ["new"],
+    description: "Full product description",
+    shortDescription: "Short description",
     discount: null,
-    originalPrice: 0,
-    conditions: "",
+    originalPrice: null,
+    conditions: "Technical support",
     brand: {
-      id: 1,
+      id: 0,
     },
     catalog: {
-      id: 1,
+      id: 0,
     },
     characteristics: [
       {
-        parameterName: "",
-        description: "",
+        parameterName: "Parameter Name",
+        description: "Description",
       },
     ],
-    mainPhoto: null,
-    gallery: [],
   });
+  const [productGallery, setProductGallery] = useState([]);
 
   return (
-    <div className="fixed inset-0 z-[9999] h-screen w-screen bg-white flex ">
-        <CreatedList />
-        <ProductPreview />
+    <div className="fixed inset-0 z-[9999] h-screen w-screen bg-white flex">
+      <CreatedList />
+      <ProductPreview
+        productGallery={productGallery}
+        setProductGallery={setProductGallery}
+        emptyProduct={emptyProduct}
+        setEmptyProduct={setEmptyProduct}
+      />
     </div>
   );
 }
