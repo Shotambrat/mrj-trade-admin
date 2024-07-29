@@ -12,9 +12,8 @@ const formatNumber = (number) => {
 export default function ProductPreview({
   productGallery,
   setProductGallery,
-  emptyProduct,
-  setEmptyProduct,
-  updateCreatedList, // Receive the update function here
+  activeProduct,
+  updateCreatedList,
 }) {
   const [modal, setModal] = useState(false);
 
@@ -26,15 +25,17 @@ export default function ProductPreview({
     setModal(false);
   };
 
+  if (!activeProduct) return null;
+
   return (
     <div className="w-full flex flex-col p-12 overflow-y-scroll no-scrollbar">
       <div className="w-full flex gap-12 p-12">
         {modal && (
           <ProductInfo
-            emptyProduct={emptyProduct}
-            setEmptyProduct={setEmptyProduct}
+            emptyProduct={activeProduct}
+            setEmptyProduct={(product) => updateCreatedList(product)}
             closeModal={handleCloseModal}
-            updateCreatedList={updateCreatedList} // Pass the update function here
+            updateCreatedList={updateCreatedList}
           />
         )}
         <div className="flex-1 w-full">
@@ -45,48 +46,48 @@ export default function ProductPreview({
         </div>
         <div className="w-full flex-1 flex flex-col gap-5">
           <div className="flex gap-4 max-lg:hidden">
-            <h1 className="text-3xl font-semibold">{emptyProduct.name}</h1>
-            {emptyProduct.tag.includes("New") && (
+            <h1 className="text-3xl font-semibold">{activeProduct.name}</h1>
+            {activeProduct.tag.includes("New") && (
               <div className="py-2 px-5 font-bold rounded-full text-greenView bg-greenCategory">
                 New
               </div>
             )}
           </div>
           <p className="text-neutral-400 leading-5">
-            {emptyProduct.shortDescription}
+            {activeProduct.shortDescription}
           </p>
-          {emptyProduct.tag.includes("Promotion") ? (
+          {activeProduct.tag.includes("Promotion") ? (
             <div className="flex items-start gap-6 text-lg">
               <div className="flex flex-col">
                 <span className="text-greenView font-bold text-3xl ">
-                  {formatNumber(emptyProduct.priceWithDiscount)} ye
+                  {formatNumber(activeProduct.priceWithDiscount)} ye
                 </span>
                 <span className="text-gray-500 line-through">
-                  {formatNumber(emptyProduct.originalPrice)} ye
+                  {formatNumber(activeProduct.originalPrice)} ye
                 </span>
               </div>
               <span className="text-greenView bg-green-100 px-4 py-1 flex items-center rounded-full font-bold">
-                -{emptyProduct.discount}%
+                -{activeProduct.discount}%
               </span>
             </div>
           ) : (
             <div className="text-lg text-green-500 font-bold">
-              {/* {formatNumber(emptyProduct.priceWithDiscount || emptyProduct.originalPrice)} ye */}
+              {/* {formatNumber(activeProduct.priceWithDiscount || activeProduct.originalPrice)} ye */}
             </div>
           )}
           <hr />
           <div className="w-full flex justify-between items-center">
             <p className="w-full text-lg max-w-[250px] font-semibold leading-5">
-              {emptyProduct.conditions}
+              {activeProduct.conditions}
             </p>
-            {emptyProduct.brand.id === 0 ? (
+            {activeProduct.brand.id === 0 ? (
               <div></div>
             ) : (
               <Image
-                src={emptyProduct.brand.photo.url}
+                src={activeProduct.brand.photo.url}
                 width={300}
                 height={300}
-                alt={emptyProduct.brand.title}
+                alt={activeProduct.brand.title}
                 className="w-32 h-10"
               />
             )}
@@ -102,7 +103,7 @@ export default function ProductPreview({
         </div>
       </div>
       <div className="mt-0">
-        <ProductCharacteristics emptyProduct={emptyProduct} setEmptyProduct={setEmptyProduct} />
+        <ProductCharacteristics emptyProduct={activeProduct} setEmptyProduct={updateCreatedList} />
       </div>
     </div>
   );

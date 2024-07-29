@@ -23,7 +23,7 @@ export default function ProductCharacteristics({ emptyProduct, setEmptyProduct }
   const [showCharacteristicsModal, setShowCharacteristicsModal] = useState(false);
 
   const addNewParameter = () => {
-    const newParameter = { parameterName: '', description: [''] };
+    const newParameter = { parameterName: '', description: '' };
     const updatedCharacteristics = [...emptyProduct.characteristics, newParameter];
     setEmptyProduct({ ...emptyProduct, characteristics: updatedCharacteristics });
   };
@@ -75,9 +75,10 @@ export default function ProductCharacteristics({ emptyProduct, setEmptyProduct }
                   {item.parameterName}
                 </p>
                 <div className="flex w-full flex-col">
-                  {item.description.map((desc, j) => (
+                {item.description.split('\n').map((desc, j) => (
                     <p key={j}>{desc}</p>
                   ))}
+
                 </div>
               </div>
             ))}
@@ -146,10 +147,10 @@ export default function ProductCharacteristics({ emptyProduct, setEmptyProduct }
                     Description
                     <textarea
                       name="description"
-                      value={characteristic.description.join('\n')}
+                      value={characteristic.description}
                       onChange={(e) => {
                         const newCharacteristics = [...emptyProduct.characteristics];
-                        newCharacteristics[index].description = e.target.value.split('\n');
+                        newCharacteristics[index].description = e.target.value;
                         setEmptyProduct({ ...emptyProduct, characteristics: newCharacteristics });
                       }}
                       className="border p-2 rounded w-full h-20"
