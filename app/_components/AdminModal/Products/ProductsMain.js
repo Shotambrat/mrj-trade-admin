@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductPreview from "./ProductPreview";
 import CreatedList from "./CreatedList";
 import DeleteModal from "./Modal/DeleteModal";
 
 export default function ProductsMain({ setProductModal }) {
   const [canClose, setCanClose] = useState(true);
-  const [activeId, setActiveId] = useState(1);
+  const [activeId, setActiveId] = useState(null);
   const [idCount, setIdCount] = useState(2);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
@@ -40,6 +40,10 @@ export default function ProductsMain({ setProductModal }) {
   const [createdList, setCreatedList] = useState([{ ...emptyProduct, id: 1 }]);
   const [productGalleries, setProductGalleries] = useState({});
 
+  useEffect(() => {
+    setActiveId(createdList[0]?.id || null);
+  }, []);
+
   const updateCreatedList = (updatedProduct) => {
     setCreatedList((prevList) =>
       prevList.map((item) =>
@@ -58,7 +62,7 @@ export default function ProductsMain({ setProductModal }) {
 
   const confirmDeleteProduct = (id) => {
     setCreatedList((prevList) => prevList.filter((item) => item.id !== id));
-    setActiveId((prevList) => (prevList[0] ? prevList[0].id : 0));
+    setActiveId((prevList) => (prevList[0] ? prevList[0].id : null));
     setShowDeleteModal(false);
   };
 
@@ -80,7 +84,7 @@ export default function ProductsMain({ setProductModal }) {
     for (const product of createdList) {
       const formData = new FormData();
       const productData = { ...product };
-      delete productData.id; // Убираем id, так как он не нужен для отправки
+      delete productData.id;
       delete productData.priceWithDiscount;
       delete productData.subcategory;
       delete productData.category;
@@ -91,13 +95,17 @@ export default function ProductsMain({ setProductModal }) {
           formData.append("gallery", file);
         });
       }
+
+      console.log([...formData.entries()].reduce((accumulator, [key, value]) => {
+        accumulator[key] = value;
+        return accumulator;
+      }, {}));
+
       try {
         const response = await fetch("http://213.230.91.55:8110/product/v2/add", {
           method: "POST",
           body: formData,
         });
-
-        console.log("Response: ", response.json())
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -105,10 +113,8 @@ export default function ProductsMain({ setProductModal }) {
 
         const result = await response.json();
         console.log("Product saved successfully:", result);
-        // Обработка успешного ответа
       } catch (error) {
         console.error("Error saving product:", error);
-        // Обработка ошибки
       }
     }
     setProductModal(false);
@@ -118,31 +124,35 @@ export default function ProductsMain({ setProductModal }) {
 
   return (
     <div className="fixed inset-0 z-[9999] h-screen w-screen bg-white flex">
-      <CreatedList
-        handleDeleteProduct={handleDeleteProduct}
-        createNewProduct={createNewProduct}
-        createdList={createdList}
-        setProductModal={setProductModal}
-        handleSelectProduct={handleSelectProduct}
-        productGalleries={productGalleries}
-        handleSave={handleSaveProducts} // Передача функции handleSave
-      />
-      <ProductPreview
-        productGallery={productGalleries[activeId] || []}
-        setProductGallery={(gallery) =>
-          setProductGalleries({
-            ...productGalleries,
-            [activeId]: gallery,
-          })
-        }
-        activeProduct={activeProduct}
-        updateCreatedList={updateCreatedList}
-      />
-      {showDeleteModal && (
-        <DeleteModal
-          onConfirm={() => confirmDeleteProduct(productToDelete)}
-          onCancel={() => setShowDeleteModal(false)}
-        />
+      {activeId !== null && (
+        <>
+          <CreatedList
+            handleDeleteProduct={handleDeleteProduct}
+            createNewProduct={createNewProduct}
+            createdList={createdList}
+            setProductModal={setProductModal}
+            handleSelectProduct={handleSelectProduct}
+            productGalleries={productGalleries}
+            handleSave={handleSaveProducts}
+          />
+          <ProductPreview
+            productGallery={productGalleries[activeId] || []}
+            setProductGallery={(gallery) =>
+              setProductGalleries({
+                ...productGalleries,
+                [activeId]: gallery,
+              })
+            }
+            activeProduct={activeProduct}
+            updateCreatedList={updateCreatedList}
+          />
+          {showDeleteModal && (
+            <DeleteModal
+              onConfirm={() => confirmDeleteProduct(productToDelete)}
+              onCancel={() => setShowDeleteModal(false)}
+            />
+          )}
+        </>
       )}
     </div>
   );

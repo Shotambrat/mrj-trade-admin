@@ -1,340 +1,48 @@
 "use client";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 import CatalogList from "./CatalogBar";
-import mindrayDC60 from "@/public/images/equipments/equip-lab.png"; // Пример изображения, замените на ваши изображения
-import mindraySV300 from "@/public/images/equipments/equip-uzi.png"; // Пример изображения, замените на ваши изображения
-import cl900i from "@/public/images/equipments/equip-lab.png"; // Пример изображения, замените на ваши изображения
-import mindrayUniBase from "@/public/images/equipments/equip-uzi.png"; // Пример изображения, замените на ваши изображения
-import mindrayBeneHeart from "@/public/images/equipments/equip-lab.png"; // Пример изображения, замените на ваши изображения
 import Catalogitem from "./Catalogitem";
 import Dropdown from "./DropDown";
-import tableCatalog from "@/public/svg/table-catalog.svg";
 import Image from "next/image";
 import Category from "../Modal/Category";
 import ProductsMain from "../AdminModal/Products/ProductsMain";
+import tableCatalog from "@/public/svg/table-catalog.svg";
 
-export default function List() {
+export default function List({ categoryId }) {
   const [categoryModal, setCategoryModal] = useState(false);
+  const [productModal, setProductModal] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
+  const [filter, setFilter] = useState("all");
 
-  const data = [
-    {
-      category: "1-ultrasound-diagnostic-systems",
-      caltalogList: [
-        {
-          catalog: "4-portable",
-          data: [
-            {
-              title: "MINDRAY DC 60 X-insight",
-              description: "A high-end ultrasound scanner that allows for high-quality diagnostics",
-              image: mindrayDC60,
-              new: false,
-              promotions: true,
-              price: '2500000 y.e',
-              sale: '-35%',
-              slug: '1-mindray',
-            },
-            {
-              title: "MINDRAY SV300",
-              description: "Advanced solution for mechanical ventilation in clinical settings",
-              image: mindraySV300,
-              new: true,
-              promotions: false,
-              slug: '2-mindray',
-            },
-            {
-              title: "CL-900i",
-              description: "One of the smallest fully automated chemiluminescent immunoassay analyzers",
-              image: cl900i,
-              new: true,
-              promotions: false,
-              sale: '-5%',
-              slug: '1-cl',
-            },
-            {
-              title: "MINDRAY UniBase 30",
-              description: "Reliable and durable operating table at an affordable price",
-              image: mindrayUniBase,
-              new: true,
-              promotions: false,
-              slug: '2-mindray',
-            },
-            {
-              title: "MINDRAY BeneHeart",
-              description: "Mindray’s new solution for non-invasive electrocardiography",
-              image: mindrayBeneHeart,
-              new: false,
-              promotions: true,
-              price: '2500 y.e',
-              sale: '-5%',
-              slug: '4-mindray',
-            },
-            {
-              title: "MINDRAY DC 60 X-insight",
-              description: "A high-end ultrasound scanner that allows for high-quality diagnostics",
-              image: mindrayDC60,
-              new: false,
-              promotions: true,
-              price: '2500 y.e',
-              sale: '-55%',
-              slug: '5-mindray',
-            },
-            {
-              title: "MINDRAY SV300",
-              description: "Advanced solution for mechanical ventilation in clinical settings",
-              image: mindraySV300,
-              new: true,
-              promotions: false,
-              slug: '6-mindray',
-            },
-            {
-              title: "CL-900i",
-              description: "One of the smallest fully automated chemiluminescent immunoassay analyzers",
-              image: cl900i,
-              new: true,
-              promotions: false,
-              slug: '2-cl',
-            },
-            {
-              title: "MINDRAY UniBase 30",
-              description: "Reliable and durable operating table at an affordable price",
-              image: mindrayUniBase,
-              new: true,
-              promotions: false,
-              slug: '7-mindray',
-            },
-            {
-              title: "MINDRAY BeneHeart",
-              description: "Mindray’s new solution for non-invasive electrocardiography",
-              image: mindrayBeneHeart,
-              new: false,
-              promotions: true,
-              price: '2500 y.e',
-              sale: '-25%',
-              slug: '8-mindray',
-            },
-          ],
-        },
-        {
-          catalog: "2-stationary",
-          data: [
-            {
-              title: "MINDRAY DC 60 X-insight",
-              description:
-                "A high-end ultrasound scanner that allows for high-quality diagnostics",
-              image: mindrayDC60,
-              new: false,
-              promotions: true,
-              price: "2500 y.e",
-              sale: "-55%",
-            },
-            {
-              title: "MINDRAY SV300",
-              description:
-                "Advanced solution for mechanical ventilation in clinical settings",
-              image: mindraySV300,
-              new: true,
-              promotions: false,
-            },
-            {
-              title: "CL-900i",
-              description:
-                "One of the smallest fully automated chemiluminescent immunoassay analyzers",
-              image: cl900i,
-              new: true,
-              promotions: false,
-            },
-            {
-              title: "MINDRAY UniBase 30",
-              description:
-                "Reliable and durable operating table at an affordable price",
-              image: mindrayUniBase,
-              new: true,
-              promotions: false,
-            },
-            {
-              title: "MINDRAY BeneHeart",
-              description:
-                "Mindray’s new solution for non-invasive electrocardiography",
-              image: mindrayBeneHeart,
-              new: false,
-              promotions: true,
-              price: "2500 y.e",
-              sale: "-25%",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: "2-laboratory-equipment",
-      caltalogList: [
-        {
-          catalog: "3-portable",
-          data: [
-            {
-              title: "MINDRAY DC 60 X-insight",
-              description:
-                "A high-end ultrasound scanner that allows for high-quality diagnostics",
-              image: mindrayDC60,
-              new: false,
-              promotions: true,
-              price: "2500000 y.e",
-              sale: "-35%",
-            },
-            {
-              title: "MINDRAY SV300",
-              description:
-                "Advanced solution for mechanical ventilation in clinical settings",
-              image: mindraySV300,
-              new: true,
-              promotions: false,
-            },
-            {
-              title: "CL-900i",
-              description:
-                "One of the smallest fully automated chemiluminescent immunoassay analyzers",
-              image: cl900i,
-              new: true,
-              promotions: false,
-              sale: "-5%",
-            },
-            {
-              title: "MINDRAY UniBase 30",
-              description:
-                "Reliable and durable operating table at an affordable price",
-              image: mindrayUniBase,
-              new: true,
-              promotions: false,
-            },
-            {
-              title: "MINDRAY BeneHeart",
-              description:
-                "Mindray’s new solution for non-invasive electrocardiography",
-              image: mindrayBeneHeart,
-              new: false,
-              promotions: true,
-              price: "2500 y.e",
-              sale: "-5%",
-            },
-            {
-              title: "MINDRAY DC 60 X-insight",
-              description:
-                "A high-end ultrasound scanner that allows for high-quality diagnostics",
-              image: mindrayDC60,
-              new: false,
-              promotions: true,
-              price: "2500 y.e",
-              sale: "-55%",
-            },
-            {
-              title: "MINDRAY SV300",
-              description:
-                "Advanced solution for mechanical ventilation in clinical settings",
-              image: mindraySV300,
-              new: true,
-              promotions: false,
-            },
-            {
-              title: "CL-900i",
-              description:
-                "One of the smallest fully automated chemiluminescent immunoassay analyzers",
-              image: cl900i,
-              new: true,
-              promotions: false,
-            },
-            {
-              title: "MINDRAY UniBase 30",
-              description:
-                "Reliable and durable operating table at an affordable price",
-              image: mindrayUniBase,
-              new: true,
-              promotions: false,
-            },
-            {
-              title: "MINDRAY BeneHeart",
-              description:
-                "Mindray’s new solution for non-invasive electrocardiography",
-              image: mindrayBeneHeart,
-              new: false,
-              promotions: true,
-              price: "2500 y.e",
-              sale: "-25%",
-            },
-            {
-              title: "MINDRAY SV300",
-              description:
-                "Advanced solution for mechanical ventilation in clinical settings",
-              image: mindraySV300,
-              new: true,
-              promotions: false,
-            },
-            {
-              title: "CL-900i",
-              description:
-                "One of the smallest fully automated chemiluminescent immunoassay analyzers",
-              image: cl900i,
-              new: true,
-              promotions: false,
-            },
-            {
-              title: "MINDRAY UniBase 30",
-              description:
-                "Reliable and durable operating table at an affordable price",
-              image: mindrayUniBase,
-              new: true,
-              promotions: false,
-            },
-            {
-              title: "MINDRAY BeneHeart",
-              description:
-                "Mindray’s new solution for non-invasive electrocardiography",
-              image: mindrayBeneHeart,
-              new: false,
-              promotions: true,
-              price: "2500 y.e",
-              sale: "-25%",
-            },
-          ],
-        },
-      ],
-    },
-    {
-      category: "2-laboratory-equipment",
-      data: [
-        {
-          title: "MINDRAY BeneHeart",
-          description:
-            "Mindray’s new solution for non-invasive electrocardiography",
-          image: mindrayBeneHeart,
-          new: false,
-          promotions: true,
-          price: "2500 y.e",
-          sale: "-5%",
-        },
-        {
-          title: "MINDRAY DC 60 X-insight",
-          description:
-            "A high-end ultrasound scanner that allows for high-quality diagnostics",
-          image: mindrayDC60,
-          new: false,
-          promotions: true,
-          price: "2500 y.e",
-          sale: "-55%",
-        },
-        {
-          title: "MINDRAY SV300",
-          description:
-            "Advanced solution for mechanical ventilation in clinical settings",
-          image: mindraySV300,
-          new: true,
-          promotions: false,
-        },
-      ],
-    },
-  ];
+  useEffect(() => {
+    // Fetch categories
+    fetch("http://213.230.91.55:8110/category")
+      .then((response) => response.json())
+      .then((data) => setCategories(data.data.item));
 
-  const [productModal, setProductModal] = useState(false)
+    // Fetch products by category ID
+    fetch(`http://213.230.91.55:8110/product/v2/all?category-id=${categoryId}`)
+      .then((response) => response.json())
+      .then((data) => setProducts(data.data));
+  }, [categoryId]);
+
+  const handleCatalogSelect = (catalogId) => {
+    fetch(`http://213.230.91.55:8110/product/v2/all?catalog-id=${catalogId}`)
+      .then((response) => response.json())
+      .then((data) => setProducts(data.data))
+      .catch((error) => console.error("Error fetching products:", error));
+  };
+
+  const handleFilterChange = (newFilter) => {
+    setFilter(newFilter);
+  };
+
+  const filteredProducts = products.filter((product) => {
+    if (filter === "new") return product.tag.includes("New");
+    if (filter === "promotion") return product.tag.includes("Promotion");
+    return true;
+  });
 
   const handleClose = () => {
     setCategoryModal(false);
@@ -360,23 +68,23 @@ export default function List() {
             />
             Categories
           </button>
-          <Dropdown />
+          <Dropdown onFilterChange={handleFilterChange} />
         </div>
       </div>
       <div className="w-full flex gap-10">
         <div className="w-full max-w-[350px] max-2xl:max-w-[280px]  max-lg:hidden">
-          <CatalogList />
+          <CatalogList categories={categories} onCatalogSelect={handleCatalogSelect} />
         </div>
         <div className="w-full grid grid-cols-1 mdl:grid-cols-2 3xl:grid-cols-3 gap-4">
-          {data[0].caltalogList[0].data.map((item, index) => (
+          {filteredProducts.map((item, index) => (
             <div key={index}>
               <Catalogitem
-                new={item.new}
-                sale={item.sale}
-                image={item.image}
-                title={item.title}
-                description={item.description}
-                price={item.price}
+                new={item.tag.includes("New")}
+                sale={item.discount ? `-${item.discount}%` : null}
+                image={item.photo.url}
+                title={item.name}
+                description={item.shortDescription}
+                price={item.originalPrice ? `${item.originalPrice} y.e` : null}
                 slug={item.slug}
               />
             </div>

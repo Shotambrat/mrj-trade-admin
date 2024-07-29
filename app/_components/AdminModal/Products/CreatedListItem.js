@@ -9,7 +9,7 @@ export default function CreatedListItem({ handleDeleteProduct, item, productGall
     <button className="w-full px-2 py-2 border border-neutral-300 rounded-lg bg-white relative flex gap-2">
       <div className="h-full w-auto border border-neutral-300 bg-white rounded-lg">
         <Image
-          src={firstImage}
+          src={firstImage instanceof File ? URL.createObjectURL(firstImage) : firstImage}
           width={100}
           height={100}
           alt="Product Image"

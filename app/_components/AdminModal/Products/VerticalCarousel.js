@@ -6,17 +6,12 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Image from "next/image";
 import imageIcon from "@/public/svg/image-icon.svg";
 
-const VerticalCarousel = ( {gallery, setGallery} ) => {
+const VerticalCarousel = ({ gallery, setGallery }) => {
   const [selectedImage, setSelectedImage] = useState(0);
-  
 
   const handleImageUpload = (event) => {
-    const files = event.target.files;
-    const newImages = [];
-    for (let i = 0; i < files.length; i++) {
-      newImages.push(URL.createObjectURL(files[i]));
-    }
-    setGallery([...gallery, ...newImages]);
+    const files = Array.from(event.target.files);
+    setGallery([...gallery, ...files]);
   };
 
   const handleImageDelete = (index) => {
@@ -26,11 +21,11 @@ const VerticalCarousel = ( {gallery, setGallery} ) => {
   return (
     <div
       className={`flex flex-col ${
-        gallery.length == 0 ? "gap-0 px-36 h-[300px]" : "gap-8"
+        gallery.length === 0 ? "gap-0 px-36 h-[300px]" : "gap-8"
       } w-full max-w-[1440px] mx-auto`}
     >
       <div
-        className={`w-full h-full  ${
+        className={`w-full h-full ${
           gallery.length > 0 ? "" : "flex justify-center items-center"
         }`}
       >
@@ -46,16 +41,15 @@ const VerticalCarousel = ( {gallery, setGallery} ) => {
             className="main-carousel"
             showArrows={false}
           >
-            {gallery.map((src, index) => (
+            {gallery.map((file, index) => (
               <div key={index} className="relative">
                 <Image
-                  src={src}
+                  src={URL.createObjectURL(file)}
                   alt={`Slide ${index}`}
                   className="object-contain h-96 w-full border"
                   width={800}
                   height={600}
                 />
-
               </div>
             ))}
           </Carousel>
@@ -96,37 +90,35 @@ const VerticalCarousel = ( {gallery, setGallery} ) => {
             showThumbs={false}
             showIndicators={false}
             showStatus={false}
-            // infiniteLoop={true}
-            className="thumbnail-carousel"
             centerMode={true}
             centerSlidePercentage={20}
             swipeable={false}
             emulateTouch={true}
             showArrows={false}
           >
-          <div className="w-full h-[80%] flex justify-center items-center">
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="hidden"
-              id="image-upload"
-            />
-            <label
-              htmlFor="image-upload"
-              className="cursor-pointer text-greenView rounded-lg h-full w-full flex flex-col gap-4 justify-center items-center border-2 border-greenView border-dashed"
-            >
-              <Image
-                src={imageIcon}
-                width={500}
-                height={500}
-                alt="Image Icon"
-                className="w-12 h-12 "
+            <div className="w-full h-[80%] flex justify-center items-center">
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+                id="image-upload"
               />
-            </label>
-          </div>
-            {gallery.map((src, index) => (
+              <label
+                htmlFor="image-upload"
+                className="cursor-pointer text-greenView rounded-lg h-full w-full flex flex-col gap-4 justify-center items-center border-2 border-greenView border-dashed"
+              >
+                <Image
+                  src={imageIcon}
+                  width={500}
+                  height={500}
+                  alt="Image Icon"
+                  className="w-12 h-12 "
+                />
+              </label>
+            </div>
+            {gallery.map((file, index) => (
               <div
                 key={index}
                 onClick={() => setSelectedImage(index)}
@@ -137,13 +129,13 @@ const VerticalCarousel = ( {gallery, setGallery} ) => {
                 }`}
               >
                 <Image
-                  src={src}
+                  src={URL.createObjectURL(file)}
                   alt={`Thumbnail ${index}`}
                   className="object-contain h-full rounded-xl w-full"
                   width={100}
                   height={100}
                 />
-                                <button
+                <button
                   onClick={() => handleImageDelete(index)}
                   className="absolute top-0 right-0 bg-greenView w-6 h-6 text-sm text-white rounded-full flex justify-center items-center"
                 >
@@ -161,7 +153,6 @@ const VerticalCarousel = ( {gallery, setGallery} ) => {
 };
 
 export default VerticalCarousel;
-
 // <input
 // type="file"
 // multiple

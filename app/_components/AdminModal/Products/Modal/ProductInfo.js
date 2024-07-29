@@ -40,10 +40,34 @@ export default function ProductInfo({
     setProduct({ ...product, [name]: value });
   };
 
+  const handleCategoryChange = (e) => {
+    const selectedCategory = categories.find(
+      (category) => category.title === e.target.value
+    );
+    setProduct({
+      ...product,
+      category: e.target.value,
+      catalog: { id: selectedCategory.id },
+      subcategory: ""
+    });
+    setSubcategories(selectedCategory ? selectedCategory.catalog : []);
+  };
+
+  const handleSubcategoryChange = (e) => {
+    const selectedSubcategory = subcategories.find(
+      (sub) => sub.name === e.target.value
+    );
+    setProduct({
+      ...product,
+      subcategory: e.target.value,
+      catalog: { id: selectedSubcategory.id }
+    });
+  };
+
   const handleTagChange = (tag) => {
     const newTags = product.tag.includes(tag)
       ? product.tag.filter((t) => t !== tag)
-      : [...product.tag.filter((t) => t !== "Promotion"), tag]; // Only allow one tag if Promotion is selected
+      : [...product.tag.filter((t) => t !== "Promotion"), tag];
     setProduct({ ...product, tag: newTags });
   };
 
@@ -94,7 +118,7 @@ export default function ProductInfo({
             <select
               name="category"
               value={product.category}
-              onChange={handleInputChange}
+              onChange={handleCategoryChange}
               className="border p-2 rounded w-full"
             >
               {categories.map((category) => (
@@ -109,7 +133,7 @@ export default function ProductInfo({
             <select
               name="subcategory"
               value={product.subcategory}
-              onChange={handleInputChange}
+              onChange={handleSubcategoryChange}
               className="border p-2 rounded w-full"
             >
               {subcategories.map((sub) => (

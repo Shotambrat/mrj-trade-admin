@@ -1,11 +1,9 @@
 "use client";
-
-import Image from "next/image";
-import { Transition } from "@headlessui/react";
 import { useState } from "react";
+import { Transition } from "@headlessui/react";
+import Image from "next/image";
 import upGreen from "@/public/svg/arrow-up-green.svg";
 import downGray from "@/public/svg/arrow-down-gray.svg";
-import Link from "next/link";
 
 const AccordionItem = ({ title, isOpen, onClick, children }) => {
   return (
@@ -56,51 +54,7 @@ const AccordionContent = ({ children }) => {
   return <div className="pb-5 px-4">{children}</div>;
 };
 
-const data = [
-  {
-    id: 1,
-    name: "Ultrasound Diagnostic Systems",
-    slug: "1-ultrasound-diagnostic-systems",
-    active: true,
-    catalogList: [
-      {
-        id: 4,
-        name: "Portable",
-        slug: "4-portable",
-        active: true,
-      },
-      {
-        id: 2,
-        name: "Stationary",
-        slug: "2-stationary",
-        active: true,
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: "Laboratory Equipment",
-    slug: "2-laboratory-equipment",
-    active: true,
-    catalogList: [
-      {
-        id: 3,
-        name: "Portable",
-        slug: "3-portable",
-        active: true,
-      },
-    ],
-  },
-  {
-    id: 3,
-    name: "Single Equipment",
-    slug: "3-single-equipment",
-    active: true,
-    catalogList: [],
-  },
-];
-
-export default function CatalogList() {
+export default function CatalogList({ categories, onCatalogSelect }) {
   const [openSections, setOpenSections] = useState([]);
 
   const toggleSection = (section) => {
@@ -114,33 +68,39 @@ export default function CatalogList() {
   return (
     <section className="w-full">
       <div className="flex flex-col w-full">
-        {data.map(({ id, name, slug, catalogList }) => (
+        {categories.map(({ id, title, catalog }) => (
           <div key={id} className="w-full">
-            {catalogList.length > 0 ? (
+            {catalog.length > 0 ? (
               <AccordionItem
-                title={name}
+                title={title}
                 isOpen={openSections.includes(id)}
                 onClick={() => toggleSection(id)}
               >
                 <AccordionContent>
                   <div className="flex flex-col gap-5 text-lg font-semibold text-neutral-900 w-full">
-                    {catalogList.map(
+                    {catalog.map(
                       (catalogItem) =>
                         catalogItem.active && (
-                          <div className="cursor-pointer" key={catalogItem.id}>{catalogItem.name}</div>
+                          <div
+                            className="cursor-pointer"
+                            key={catalogItem.id}
+                            onClick={() => onCatalogSelect(catalogItem.id)}
+                          >
+                            {catalogItem.name}
+                          </div>
                         )
                     )}
                   </div>
                 </AccordionContent>
               </AccordionItem>
             ) : (
-              <div href={slug} className="w-full h-full">
+              <div href={title} className="w-full h-full">
                 <div
-                  href={slug}
+                  href={title}
                   className="py-7 border-t border-b border-solid border-neutral-200"
                 >
                   <span className="text-2xl font-bold text-neutral-900">
-                    {name}
+                    {title}
                   </span>
                 </div>
               </div>
