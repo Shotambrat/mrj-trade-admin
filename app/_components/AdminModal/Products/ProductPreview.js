@@ -14,6 +14,7 @@ export default function ProductPreview({
   setProductGallery,
   emptyProduct,
   setEmptyProduct,
+  updateCreatedList, // Receive the update function here
 }) {
   const [modal, setModal] = useState(false);
 
@@ -33,6 +34,7 @@ export default function ProductPreview({
             emptyProduct={emptyProduct}
             setEmptyProduct={setEmptyProduct}
             closeModal={handleCloseModal}
+            updateCreatedList={updateCreatedList} // Pass the update function here
           />
         )}
         <div className="flex-1 w-full">

@@ -9,6 +9,7 @@ export default function ProductInfo({
   emptyProduct,
   setEmptyProduct,
   closeModal,
+  updateCreatedList
 }) {
   const [product, setProduct] = useState(emptyProduct);
   const [brands, setBrands] = useState([]);
@@ -48,18 +49,25 @@ export default function ProductInfo({
 
   const handleSave = () => {
     setEmptyProduct(product);
+    updateCreatedList(product);
     closeModal();
+  };
+
+  const handlePriceChange = (e) => {
+    const { value } = e.target;
+    const price = Math.min(parseFloat(value) || 0, 1e9);
+    setProduct({ ...product, originalPrice: price });
   };
 
   const handleDiscountChange = (e) => {
     const { value } = e.target;
-    const discount = parseFloat(value) || 0;
+    const discount = Math.min(parseFloat(value) || 0, 100);
     const originalPrice = parseFloat(product.originalPrice) || 0;
     const discountPrice = originalPrice - (originalPrice * discount) / 100;
     setProduct({
       ...product,
-      discount: value,
-      priceWithDiscount: formatNumber(discountPrice),
+      discount: discount,
+      priceWithDiscount: discountPrice,
     });
   };
 
@@ -154,7 +162,7 @@ export default function ProductInfo({
                   type="number"
                   name="originalPrice"
                   value={product.originalPrice || ""}
-                  onChange={handleInputChange}
+                  onChange={handlePriceChange}
                   className="border p-2 rounded w-full"
                 />
               </label>
@@ -163,7 +171,7 @@ export default function ProductInfo({
                 <input
                   type="text"
                   name="priceWithDiscount"
-                  value={product.priceWithDiscount || ""}
+                  value={formatNumber(product.priceWithDiscount) || ""}
                   readOnly
                   className="border p-2 rounded w-full bg-gray-100"
                 />

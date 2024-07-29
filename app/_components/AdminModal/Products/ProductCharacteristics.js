@@ -23,7 +23,7 @@ export default function ProductCharacteristics({ emptyProduct, setEmptyProduct }
   const [showCharacteristicsModal, setShowCharacteristicsModal] = useState(false);
 
   const addNewParameter = () => {
-    const newParameter = { parameterName: '', description: '' };
+    const newParameter = { parameterName: '', description: [''] };
     const updatedCharacteristics = [...emptyProduct.characteristics, newParameter];
     setEmptyProduct({ ...emptyProduct, characteristics: updatedCharacteristics });
   };
@@ -75,7 +75,9 @@ export default function ProductCharacteristics({ emptyProduct, setEmptyProduct }
                   {item.parameterName}
                 </p>
                 <div className="flex w-full flex-col">
-                  <p>{item.description}</p>
+                  {item.description.map((desc, j) => (
+                    <p key={j}>{desc}</p>
+                  ))}
                 </div>
               </div>
             ))}
@@ -118,44 +120,42 @@ export default function ProductCharacteristics({ emptyProduct, setEmptyProduct }
 
       {showCharacteristicsModal && (
         <div className="fixed inset-0 z-[10000] flex justify-center items-center bg-modalBg">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-[90%] lg:w-[80%]">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-[90%] lg:w-[80%] h-[90%] overflow-y-scroll no-scrollbar">
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-semibold">Product Characteristics</h2>
               <button onClick={() => setShowCharacteristicsModal(false)}>Close</button>
             </div>
             {emptyProduct.characteristics.map((characteristic, index) => (
               <div key={index} className="w-full flex flex-col items-start">
-
-              <div  className="w-full grid grid-cols-1 gap-4 mt-4 ">
-                <label>
-                  Parameter name
-                  <input
-                    type="text"
-                    name="parameterName"
-                    value={characteristic.parameterName}
-                    onChange={(e) => {
-                      const newCharacteristics = [...emptyProduct.characteristics];
-                      newCharacteristics[index].parameterName = e.target.value;
-                      setEmptyProduct({ ...emptyProduct, characteristics: newCharacteristics });
-                    }}
-                    className="border p-2 rounded w-full"
-                  />
-                </label>
-                <label>
-                  Description
-                  <textarea
-                    name="description"
-                    value={characteristic.description}
-                    onChange={(e) => {
-                      const newCharacteristics = [...emptyProduct.characteristics];
-                      newCharacteristics[index].description = e.target.value;
-                      setEmptyProduct({ ...emptyProduct, characteristics: newCharacteristics });
-                    }}
-                    className="border p-2 rounded w-full h-20"
-                  />
-                </label>
-              </div>
-
+                <div className="w-full grid grid-cols-1 gap-4 mt-4 ">
+                  <label>
+                    Parameter name
+                    <input
+                      type="text"
+                      name="parameterName"
+                      value={characteristic.parameterName}
+                      onChange={(e) => {
+                        const newCharacteristics = [...emptyProduct.characteristics];
+                        newCharacteristics[index].parameterName = e.target.value;
+                        setEmptyProduct({ ...emptyProduct, characteristics: newCharacteristics });
+                      }}
+                      className="border p-2 rounded w-full"
+                    />
+                  </label>
+                  <label>
+                    Description
+                    <textarea
+                      name="description"
+                      value={characteristic.description.join('\n')}
+                      onChange={(e) => {
+                        const newCharacteristics = [...emptyProduct.characteristics];
+                        newCharacteristics[index].description = e.target.value.split('\n');
+                        setEmptyProduct({ ...emptyProduct, characteristics: newCharacteristics });
+                      }}
+                      className="border p-2 rounded w-full h-20"
+                    />
+                  </label>
+                </div>
                 <button
                   className="py-2 px-4 text-sm font-semibold text-red-500 rounded-xl bg-transparent border border-red-500 mt-4"
                   onClick={() => removeParameter(index)}
