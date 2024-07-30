@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import NewsPreview from "./NewsPreview";
-import NewsCreatedList from "./NewsCreatedList";
-import DeleteModal from "../Products/Modal/DeleteModal";
+import CreatedList from "./CreatedList";
+import DeleteModal from "./Modal/DeleteModal";
 
 export default function NewsMain({ setNewsModal }) {
   const [canClose, setCanClose] = useState(true);
@@ -15,12 +15,13 @@ export default function NewsMain({ setNewsModal }) {
     head: {
       title: "News Title",
       body: "News Body",
+      photo: null, // добавляем поле для фото
     },
     newOptions: [],
   };
 
   const [createdList, setCreatedList] = useState([{ ...emptyNew, id: 1 }]);
-  const [newsGalleries, setNewsGalleries] = useState({});
+  const [newGalleries, setNewGalleries] = useState({});
 
   useEffect(() => {
     setActiveId(createdList[0]?.id || null);
@@ -28,17 +29,15 @@ export default function NewsMain({ setNewsModal }) {
 
   const updateCreatedList = (updatedNew) => {
     setCreatedList((prevList) =>
-      prevList.map((item) =>
-        item.id === updatedNew.id ? updatedNew : item
-      )
+      prevList.map((item) => (item.id === updatedNew.id ? updatedNew : item))
     );
   };
 
-  const createNewNews = () => {
+  const createNew = () => {
     setIdCount(idCount + 1);
-    const newNews = { ...emptyNew, id: idCount };
+    const newNew = { ...emptyNew, id: idCount };
     setCreatedList((prevList) => {
-      return [...prevList, newNews];
+      return [...prevList, newNew];
     });
   };
 
@@ -49,8 +48,8 @@ export default function NewsMain({ setNewsModal }) {
   };
 
   const handleDeleteNew = (id) => {
-    const news = createdList.find((item) => item.id === id);
-    if (news.head.title !== "News Title") {
+    const newItem = createdList.find((item) => item.id === id);
+    if (newItem.head.title !== "News Title") {
       setNewToDelete(id);
       setShowDeleteModal(true);
     } else {
@@ -67,19 +66,13 @@ export default function NewsMain({ setNewsModal }) {
       const formData = new FormData();
       const newsData = { ...news };
       delete newsData.id;
-
       formData.append("json", JSON.stringify(newsData));
 
-      if (newsGalleries[news.id]) {
-        newsGalleries[news.id].forEach((file) => {
+      if (newGalleries[news.id]) {
+        newGalleries[news.id].forEach((file) => {
           formData.append("gallery", file);
         });
       }
-
-      console.log([...formData.entries()].reduce((accumulator, [key, value]) => {
-        accumulator[key] = value;
-        return accumulator;
-      }, {}));
 
       try {
         const response = await fetch("http://213.230.91.55:8110/news/create", {
@@ -106,24 +99,24 @@ export default function NewsMain({ setNewsModal }) {
     <div className="fixed inset-0 z-[9999] h-screen w-screen bg-white flex">
       {activeId !== null && (
         <>
-          <NewsCreatedList
+          <CreatedList
             handleDeleteNew={handleDeleteNew}
-            createNewNews={createNewNews}
+            createNew={createNew}
             createdList={createdList}
             setNewsModal={setNewsModal}
             handleSelectNew={handleSelectNew}
-            newsGalleries={newsGalleries}
+            newGalleries={newGalleries}
             handleSave={handleSaveNews}
           />
           <NewsPreview
-            newsGallery={newsGalleries[activeId] || []}
-            setNewsGallery={(gallery) =>
-              setNewsGalleries({
-                ...newsGalleries,
+            newGallery={newGalleries[activeId] || []}
+            setNewGallery={(gallery) =>
+              setNewGalleries({
+                ...newGalleries,
                 [activeId]: gallery,
               })
             }
-            newsData={activeNew}
+            activeNew={activeNew}
             updateCreatedList={updateCreatedList}
           />
           {showDeleteModal && (

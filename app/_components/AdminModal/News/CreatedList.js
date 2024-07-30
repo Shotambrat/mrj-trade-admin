@@ -1,14 +1,14 @@
 import Image from "next/image";
 import arrowLeft from '@/public/svg/arrow-left-green.svg';
-import NewsCreatedListItem from "./NewsCreatedListItem";
+import CreatedListItem from "./CreatedListItem";
 
-export default function NewsCreatedList({
+export default function CreatedList({
   handleDeleteNew,
-  createNewNews,
+  createNew,
   createdList,
   setNewsModal,
   handleSelectNew,
-  newsGalleries,
+  newGalleries,
   handleSave,
 }) {
   return (
@@ -29,10 +29,10 @@ export default function NewsCreatedList({
             {
               createdList.map((item) => (
                 <div key={item.id} onClick={() => handleSelectNew(item.id)}>
-                  <NewsCreatedListItem
+                  <CreatedListItem
                     handleDeleteNew={handleDeleteNew}
                     item={item}
-                    newsGallery={newsGalleries[item.id] || []}
+                    newGallery={newGalleries[item.id] || []}
                   />
                 </div>
               ))
@@ -40,7 +40,7 @@ export default function NewsCreatedList({
           </div>
         </div>
         <div className='w-full bg-white flex px-6 py-4 items-center justify-between gap-2'>
-          <button onClick={createNewNews} className='py-3 flex items-center px-4 border rounded-xl text-greenView'>
+          <button onClick={createNew} className='py-3 flex items-center px-4 border rounded-xl text-greenView'>
             <p className='flex items-center gap-2'>
               Add news
               <span className='text-2xl'>

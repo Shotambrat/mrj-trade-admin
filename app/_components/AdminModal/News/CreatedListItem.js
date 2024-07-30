@@ -2,8 +2,8 @@ import Image from "next/image";
 import close from "@/public/svg/close-gray.svg";
 import defaultImage from "@/public/images/equipments/uzi.png";
 
-export default function NewsCreatedListItem({ handleDeleteNew, item, newsGallery }) {
-  const firstImage = newsGallery.length > 0 ? newsGallery[0] : defaultImage;
+export default function CreatedListItem({ handleDeleteNew, item, newGallery }) {
+  const firstImage = newGallery.length > 0 ? newGallery[0] : defaultImage;
 
   return (
     <button className="w-full px-2 py-2 border border-neutral-300 rounded-lg bg-white relative flex gap-2">
