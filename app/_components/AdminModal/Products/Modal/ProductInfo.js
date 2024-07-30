@@ -97,7 +97,7 @@ export default function ProductInfo({
 
   return (
     <div className="fixed inset-0 z-[10000] flex justify-center items-center bg-modalBg">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-[90%] lg:w-[60%]">
+      <div className="bg-white p-8 rounded-lg shadow-lg w-[90%] lg:w-[60%] max-h-[95%] overflow-y-scroll no-scrollbar">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold">Product Info</h2>
           <button onClick={closeModal}>Close</button>

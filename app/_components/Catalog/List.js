@@ -19,13 +19,9 @@ export default function List({ categoryId }) {
     // Fetch categories
     fetch("http://213.230.91.55:8110/category")
       .then((response) => response.json())
-      .then((data) => setCategories(data.data.item));
-
-    // Fetch products by category ID
-    fetch(`http://213.230.91.55:8110/product/v2/all?category-id=${categoryId}`)
-      .then((response) => response.json())
-      .then((data) => setProducts(data.data));
-  }, [categoryId]);
+      .then((data) => setCategories(data.data.item))
+      .catch((error) => console.error("Error fetching categories:", error));
+  }, []);
 
   const handleCatalogSelect = (catalogId) => {
     fetch(`http://213.230.91.55:8110/product/v2/all?catalog-id=${catalogId}`)
@@ -39,14 +35,14 @@ export default function List({ categoryId }) {
   };
 
   const filteredProducts = products.filter((product) => {
-    if (filter === "new") return product.tag.includes("New");
-    if (filter === "promotion") return product.tag.includes("Promotion");
+    if (filter === "new") return product.tag.includes("new");
+    if (filter === "promotion") return product.tag.includes("promotion");
     return true;
   });
 
   const handleClose = () => {
     setCategoryModal(false);
-  }
+  };
 
   return (
     <div className="w-full max-w-[1440px] mx-auto flex flex-col lg:gap-20 gap-5 px-2">
@@ -72,14 +68,14 @@ export default function List({ categoryId }) {
         </div>
       </div>
       <div className="w-full flex gap-10">
-        <div className="w-full max-w-[350px] max-2xl:max-w-[280px]  max-lg:hidden">
+        <div className="w-full max-w-[350px] max-2xl:max-w-[280px] max-lg:hidden">
           <CatalogList categories={categories} onCatalogSelect={handleCatalogSelect} />
         </div>
         <div className="w-full grid grid-cols-1 mdl:grid-cols-2 3xl:grid-cols-3 gap-4">
           {filteredProducts.map((item, index) => (
             <div key={index}>
               <Catalogitem
-                new={item.tag.includes("New")}
+                new={item.tag.includes("new")}
                 sale={item.discount ? `-${item.discount}%` : null}
                 image={item.photo.url}
                 title={item.name}

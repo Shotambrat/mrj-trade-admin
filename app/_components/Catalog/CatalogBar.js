@@ -12,7 +12,7 @@ const AccordionItem = ({ title, isOpen, onClick, children }) => {
         onClick={onClick}
         className={`flex gap-5 py-7 ${
           isOpen ? "text-greenView" : "text-black"
-        } font-semibold text-xl  max-md:max-w-full cursor-pointer`}
+        } font-semibold text-xl max-md:max-w-full cursor-pointer`}
       >
         <span className="flex-auto">{title}</span>
         {isOpen ? (
@@ -79,30 +79,24 @@ export default function CatalogList({ categories, onCatalogSelect }) {
                 <AccordionContent>
                   <div className="flex flex-col gap-5 text-lg font-semibold text-neutral-900 w-full">
                     {catalog.map(
-                      (catalogItem) =>
-                        catalogItem.active && (
-                          <div
-                            className="cursor-pointer"
-                            key={catalogItem.id}
-                            onClick={() => onCatalogSelect(catalogItem.id)}
-                          >
-                            {catalogItem.name}
-                          </div>
-                        )
+                      (catalogItem) => (
+                        <div
+                          className="cursor-pointer"
+                          key={catalogItem.id}
+                          onClick={() => onCatalogSelect(catalogItem.id)}
+                        >
+                          {catalogItem.name}
+                        </div>
+                      )
                     )}
                   </div>
                 </AccordionContent>
               </AccordionItem>
             ) : (
-              <div href={title} className="w-full h-full">
-                <div
-                  href={title}
-                  className="py-7 border-t border-b border-solid border-neutral-200"
-                >
-                  <span className="text-2xl font-bold text-neutral-900">
-                    {title}
-                  </span>
-                </div>
+              <div className="py-7 border-t border-b border-solid border-neutral-200">
+                <span className="text-2xl font-bold text-neutral-900">
+                  {title}
+                </span>
               </div>
             )}
           </div>
