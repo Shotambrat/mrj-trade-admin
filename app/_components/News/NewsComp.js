@@ -30,7 +30,7 @@ export default function NewsComp() {
 
   return (
     <div className="w-full max-w-[1440px] mx-auto px-2 flex flex-col gap-8 my-[120px] mdx:my-[200px] 2xl:my-[250px]">
-      {newsModal && <NewsMain setProductModal={setNewsModal} />}
+      {newsModal && <NewsMain setNewsModal={setNewsModal} />}
       <div className="w-full flex justify-between">
         <h2 className="text-3xl max-mdx:text-2xl font-semibold">NEWS</h2>
         <button onClick={() => setNewsModal(true)} className="px-8 py-2 rounded-xl bg-greenView text-white flex gap-2 items-center">

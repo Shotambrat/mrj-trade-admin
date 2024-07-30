@@ -35,8 +35,8 @@ export default function NewsPreview({
   if (!activeNew) return null;
 
   return (
-    <div className="w-full flex flex-col p-12 overflow-y-scroll no-scrollbar">
-      <div className="w-full flex gap-12 p-12">
+    <div className="w-full flex flex-col p-6 overflow-y-scroll no-scrollbar">
+      <div className="w-[900px] mx-auto flex gap-12 p-12">
         {modal && (
           <EditBlockModal
             activeNew={activeNew}
@@ -45,6 +45,8 @@ export default function NewsPreview({
           />
         )}
         <div className="flex-1 w-full">
+          <h1 className="text-3xl font-semibold">{activeNew.head.title}</h1>
+          <p className="text-neutral-400 leading-5 mt-2">{activeNew.head.body}</p>
           <Image
             src={newGallery instanceof File ? URL.createObjectURL(newGallery) : newGallery}
             width={800}
@@ -52,8 +54,6 @@ export default function NewsPreview({
             alt="News Image"
             className="object-contain h-96 w-full border"
           />
-          <h1 className="text-3xl font-semibold mt-6">{activeNew.head.title}</h1>
-          <p className="text-neutral-400 leading-5 mt-2">{activeNew.head.body}</p>
           <button
             className="mt-4 px-24 py-4 text-sm font-semibold text-white rounded-xl bg-greenView"
             onClick={handleEditClick}
@@ -95,3 +95,5 @@ export default function NewsPreview({
     </div>
   );
 }
+
+//NewsPrewiew

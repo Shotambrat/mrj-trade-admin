@@ -4,7 +4,6 @@ import CreatedList from "./CreatedList";
 import DeleteModal from "./Modal/DeleteModal";
 
 export default function NewsMain({ setNewsModal }) {
-  const [canClose, setCanClose] = useState(true);
   const [activeId, setActiveId] = useState(null);
   const [idCount, setIdCount] = useState(2);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -15,9 +14,16 @@ export default function NewsMain({ setNewsModal }) {
     head: {
       title: "News Title",
       body: "News Body",
-      photo: null, // добавляем поле для фото
+      photo: null,
     },
-    newOptions: [],
+    newOptions: [
+      {
+        heading: "Heading",
+        text: "Text",
+        orderNum: 1,
+        photo: null,
+      }
+    ],
   };
 
   const [createdList, setCreatedList] = useState([{ ...emptyNew, id: 1 }]);
@@ -130,3 +136,5 @@ export default function NewsMain({ setNewsModal }) {
     </div>
   );
 }
+
+//thatsit
