@@ -8,11 +8,10 @@ import Category from "../Modal/Category";
 import ProductsMain from "../AdminModal/Products/ProductsMain";
 import tableCatalog from "@/public/svg/table-catalog.svg";
 
-export default function List({ categoryId }) {
+export default function List({ categoryId, category, products, setProducts }) {
   const [categoryModal, setCategoryModal] = useState(false);
   const [productModal, setProductModal] = useState(false);
   const [categories, setCategories] = useState([]);
-  const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState("all");
 
   useEffect(() => {
@@ -25,6 +24,13 @@ export default function List({ categoryId }) {
 
   const handleCatalogSelect = (catalogId) => {
     fetch(`http://213.230.91.55:8110/product/v2/all?catalog-id=${catalogId}`)
+      .then((response) => response.json())
+      .then((data) => setProducts(data.data))
+      .catch((error) => console.error("Error fetching products:", error));
+  };
+
+  const handleCategorySelect = (categoryId) => {
+    fetch(`http://213.230.91.55:8110/product/v2/all?category-id=${categoryId}`)
       .then((response) => response.json())
       .then((data) => setProducts(data.data))
       .catch((error) => console.error("Error fetching products:", error));
@@ -69,7 +75,12 @@ export default function List({ categoryId }) {
       </div>
       <div className="w-full flex gap-10">
         <div className="w-full max-w-[350px] max-2xl:max-w-[280px] max-lg:hidden">
-          <CatalogList categories={categories} onCatalogSelect={handleCatalogSelect} />
+          <CatalogList
+            categories={categories}
+            onCatalogSelect={handleCatalogSelect}
+            onCategorySelect={handleCategorySelect}
+            openSection={categoryId}
+          />
         </div>
         <div className="w-full grid grid-cols-1 mdl:grid-cols-2 3xl:grid-cols-3 gap-4">
           {filteredProducts.map((item, index) => (

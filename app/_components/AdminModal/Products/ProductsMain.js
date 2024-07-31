@@ -84,16 +84,15 @@ export default function ProductsMain({ setProductModal }) {
     for (const product of createdList) {
       const formData = new FormData();
       const productData = { ...product };
-      console.log(productData)
       delete productData.id;
       delete productData.priceWithDiscount;
-      delete productData.catalog;
+      delete productData.subcategory;
       delete productData.category;
   
-      if (product.catalog.id) {
+      if (product.catalog && product.catalog.id) {
         productData.catalog = { id: product.catalog.id };
-      } else if (product.categoryItem.id) {
-        productData.categoryItem = { id: product.category.id };
+      } else if (product.categoryItem && product.categoryItem.id) {
+        productData.categoryItem = { id: product.categoryItem.id };
       }
   
       formData.append("json", JSON.stringify(productData));
@@ -127,6 +126,7 @@ export default function ProductsMain({ setProductModal }) {
     }
     setProductModal(false);
   };
+  
 
   const activeProduct = createdList.find((item) => item.id === activeId);
 

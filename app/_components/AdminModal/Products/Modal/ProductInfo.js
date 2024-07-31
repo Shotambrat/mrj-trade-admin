@@ -2,14 +2,14 @@
 import { useState, useEffect } from "react";
 
 const formatNumber = (number) => {
-  return new Intl.NumberFormat('ru-RU').format(Math.round(number));
+  return new Intl.NumberFormat("ru-RU").format(Math.round(number));
 };
 
 export default function ProductInfo({
   emptyProduct,
   setEmptyProduct,
   closeModal,
-  updateCreatedList
+  updateCreatedList,
 }) {
   const [product, setProduct] = useState(emptyProduct);
   const [brands, setBrands] = useState([]);
@@ -44,14 +44,23 @@ export default function ProductInfo({
     const selectedCategory = categories.find(
       (category) => category.title === e.target.value
     );
-    setProduct({
-      ...product,
-      category: e.target.value,
-      categoryItem: { id: selectedCategory.id },
-      catalog: selectedCategory.catalog.length > 0 ? { id: selectedCategory.catalog[0].id } : {},
-      subcategory: ""
-    });
-    setSubcategories(selectedCategory ? selectedCategory.catalog : []);
+    if (selectedCategory.catalog.length > 0) {
+      setSubcategories(selectedCategory.catalog);
+      setProduct({
+        ...product,
+        category: e.target.value,
+        catalog: { id: selectedCategory.catalog[0].id }, // Устанавливаем первый каталог как дефолтный
+        categoryItem: null
+      });
+    } else {
+      setSubcategories([]);
+      setProduct({
+        ...product,
+        category: e.target.value,
+        categoryItem: { id: selectedCategory.id },
+        catalog: null
+      });
+    }
   };
 
   const handleSubcategoryChange = (e) => {
@@ -129,21 +138,23 @@ export default function ProductInfo({
               ))}
             </select>
           </label>
-          <label>
-            Product Subcategory
-            <select
-              name="subcategory"
-              value={product.subcategory}
-              onChange={handleSubcategoryChange}
-              className="border p-2 rounded w-full"
-            >
-              {subcategories.map((sub) => (
-                <option key={sub.id} value={sub.name}>
-                  {sub.name}
-                </option>
-              ))}
-            </select>
-          </label>
+          {product.catalog && subcategories.length > 0 && (
+            <label>
+              Product Subcategory
+              <select
+                name="subcategory"
+                value={product.subcategory}
+                onChange={handleSubcategoryChange}
+                className="border p-2 rounded w-full"
+              >
+                {subcategories.map((sub) => (
+                  <option key={sub.id} value={sub.name}>
+                    {sub.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          )}
           <label>
             Tag
             <div className="flex gap-2">
@@ -213,7 +224,9 @@ export default function ProductInfo({
                   ...product,
                   brand: {
                     id: Number(e.target.value),
-                    ...brands.find((brand) => brand.id === Number(e.target.value)),
+                    ...brands.find(
+                      (brand) => brand.id === Number(e.target.value)
+                    ),
                   },
                 })
               }

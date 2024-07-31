@@ -1,18 +1,16 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Transition } from "@headlessui/react";
 import Image from "next/image";
 import upGreen from "@/public/svg/arrow-up-green.svg";
 import downGray from "@/public/svg/arrow-down-gray.svg";
 
-const AccordionItem = ({ title, isOpen, onClick, children }) => {
+const AccordionItem = ({ title, isOpen, onClick, children, defaultOpen }) => {
   return (
     <div className="border-t border-b border-solid">
       <summary
         onClick={onClick}
-        className={`flex gap-5 py-7 ${
-          isOpen ? "text-greenView" : "text-black"
-        } font-semibold text-xl max-md:max-w-full cursor-pointer`}
+        className={`flex gap-5 py-7 ${isOpen ? "text-greenView" : "text-black"} font-semibold text-xl max-md:max-w-full cursor-pointer`}
       >
         <span className="flex-auto">{title}</span>
         {isOpen ? (
@@ -54,8 +52,14 @@ const AccordionContent = ({ children }) => {
   return <div className="pb-5 px-4">{children}</div>;
 };
 
-export default function CatalogList({ categories, onCatalogSelect }) {
+export default function CatalogList({ categories, onCatalogSelect, onCategorySelect, openSection }) {
   const [openSections, setOpenSections] = useState([]);
+
+  useEffect(() => {
+    if (openSection) {
+      setOpenSections([openSection]);
+    }
+  }, [openSection]);
 
   const toggleSection = (section) => {
     setOpenSections((prev) =>
@@ -75,6 +79,7 @@ export default function CatalogList({ categories, onCatalogSelect }) {
                 title={title}
                 isOpen={openSections.includes(id)}
                 onClick={() => toggleSection(id)}
+                defaultOpen={openSections.includes(id)}
               >
                 <AccordionContent>
                   <div className="flex flex-col gap-5 text-lg font-semibold text-neutral-900 w-full">
@@ -93,10 +98,11 @@ export default function CatalogList({ categories, onCatalogSelect }) {
                 </AccordionContent>
               </AccordionItem>
             ) : (
-              <div className="py-7 border-t border-b border-solid border-neutral-200">
-                <span className="text-2xl font-bold text-neutral-900">
-                  {title}
-                </span>
+              <div
+                className="py-7 border-t border-b border-solid border-neutral-200 cursor-pointer"
+                onClick={() => onCategorySelect(id)}
+              >
+                <span className="text-2xl font-bold text-neutral-900">{title}</span>
               </div>
             )}
           </div>
