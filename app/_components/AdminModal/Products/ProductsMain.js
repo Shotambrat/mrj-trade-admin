@@ -84,33 +84,41 @@ export default function ProductsMain({ setProductModal }) {
     for (const product of createdList) {
       const formData = new FormData();
       const productData = { ...product };
+      console.log(productData)
       delete productData.id;
       delete productData.priceWithDiscount;
-      delete productData.subcategory;
+      delete productData.catalog;
       delete productData.category;
+  
+      if (product.catalog.id) {
+        productData.catalog = { id: product.catalog.id };
+      } else if (product.categoryItem.id) {
+        productData.categoryItem = { id: product.category.id };
+      }
+  
       formData.append("json", JSON.stringify(productData));
-
+  
       if (productGalleries[product.id]) {
         productGalleries[product.id].forEach((file) => {
           formData.append("gallery", file);
         });
       }
-
+  
       console.log([...formData.entries()].reduce((accumulator, [key, value]) => {
         accumulator[key] = value;
         return accumulator;
       }, {}));
-
+  
       try {
         const response = await fetch("http://213.230.91.55:8110/product/v2/add", {
           method: "POST",
           body: formData,
         });
-
+  
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
+  
         const result = await response.json();
         console.log("Product saved successfully:", result);
       } catch (error) {

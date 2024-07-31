@@ -47,7 +47,8 @@ export default function ProductInfo({
     setProduct({
       ...product,
       category: e.target.value,
-      catalog: { id: selectedCategory.id },
+      categoryItem: { id: selectedCategory.id },
+      catalog: selectedCategory.catalog.length > 0 ? { id: selectedCategory.catalog[0].id } : {},
       subcategory: ""
     });
     setSubcategories(selectedCategory ? selectedCategory.catalog : []);
