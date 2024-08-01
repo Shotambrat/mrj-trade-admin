@@ -1,4 +1,3 @@
-import Application from "../Main/Application";
 import ProductCharacteristics from "./ProductCharacteristics";
 import ProductPreview from "./ProductPreview";
 

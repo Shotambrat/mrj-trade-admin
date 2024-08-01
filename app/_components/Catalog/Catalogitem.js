@@ -1,22 +1,21 @@
-"use client"
+"use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import GreenArrow from "../Buttons/GreenArrow";
-import fav from "@/public/svg/main/fav.svg"
-import favFilled from "@/public/svg/main/fav-filled.svg"
+import fav from "@/public/svg/main/fav.svg";
+import favFilled from "@/public/svg/main/fav-filled.svg";
 
 export default function Catalogitem({ new: isNew, sale, image, title, description, price, slug }) {
-
   const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
-    const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
     setIsFavorite(favorites.some(item => item.slug === slug));
   }, [slug]);
 
   const handleFavoriteToggle = () => {
-    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
     if (isFavorite) {
       favorites = favorites.filter(item => item.slug !== slug);
@@ -24,13 +23,23 @@ export default function Catalogitem({ new: isNew, sale, image, title, descriptio
       favorites.push({ title, description, image, price, slug });
     }
 
-    localStorage.setItem('favorites', JSON.stringify(favorites));
+    localStorage.setItem("favorites", JSON.stringify(favorites));
     setIsFavorite(!isFavorite);
+  };
+
+  const truncateDescription = (desc, wordLimit) => {
+    // Replace newline characters with spaces
+    const cleanDesc = desc.replace(/\n/g, ' ');
+    const words = cleanDesc.split(" ");
+    if (words.length > wordLimit) {
+      return words.slice(0, wordLimit).join(" ") + "...";
+    }
+    return cleanDesc;
   };
 
   return (
     <div className="h-[450px] w-full">
-      <div className="border border-neutral-300 rounded-2xl p-4 pt-8 flex flex-col h-full relative">
+      <div className="border border-neutral-300 rounded-2xl p-4 pt-6 flex flex-col h-full relative">
         <div className="absolute top-2 left-2 flex gap-1">
           {isNew && (
             <div className="py-1 px-2 font-semibold rounded-full text-xs text-greenView bg-green-100">
@@ -62,7 +71,9 @@ export default function Catalogitem({ new: isNew, sale, image, title, descriptio
           />
         </div>
         <h3 className="text-md font-semibold mt-3">{title}</h3>
-        <p className="text-xs text-gray-600 mt-1">{description}</p>
+        <p className="text-xs text-gray-600 mt-1">
+          {truncateDescription(description, 14)}
+        </p>
         <div className="flex w-full justify-between items-center flex-wrap mt-3">
           <Link href={`/product/${slug}`}>
             <GreenArrow title={"more details"} />
