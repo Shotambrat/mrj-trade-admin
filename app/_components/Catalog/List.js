@@ -73,7 +73,7 @@ export default function List({ categoryId, category, products, setProducts }) {
           <Dropdown onFilterChange={handleFilterChange} />
         </div>
       </div>
-      <div className="w-full flex gap-10">
+      <div className="w-full flex gap-10 items-start">
         <div className="w-full max-w-[350px] max-2xl:max-w-[280px] max-lg:hidden">
           <CatalogList
             categories={categories}
