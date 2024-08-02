@@ -1,9 +1,9 @@
-import lingen from "@/public/images/aboutUs/partners/image28.png";
-import united from "@/public/images/aboutUs/partners/image32.png";
-import browiner from "@/public/images/aboutUs/partners/image41.png";
-import dollar from "@/public/images/aboutUs/partners/image42.png";
-import mindray from "@/public/images/aboutUs/partners/image3.png";
-import zoncare from "@/public/images/aboutUs/partners/image27.png";
+import lingen from "@/public/images/aboutUs/partners/image1.png";
+import united from "@/public/images/aboutUs/partners/image2.png";
+import browiner from "@/public/images/aboutUs/partners/image3.png";
+import dollar from "@/public/images/aboutUs/partners/image4.png";
+import mindray from "@/public/images/aboutUs/partners/image5.png";
+import zoncare from "@/public/images/aboutUs/partners/image6.png";
 
 import Image from "next/image";
 
