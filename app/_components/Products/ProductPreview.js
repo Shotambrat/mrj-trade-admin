@@ -1,6 +1,5 @@
 import Image from "next/image";
 import VerticalCarousel from "./ProductCarousel";
-import mindray from "@/public/images/aboutUs/partners/image41.png";
 import heartIcon from "@/public/svg/tools/heart-icon.svg";
 
 export default function ProductPreview() {
@@ -33,13 +32,6 @@ export default function ProductPreview() {
           <p className="w-full max-w-[200px] leading-4">
             {`Manufacturer's Warranty Technical support`}
           </p>
-          <Image
-            src={mindray}
-            width={300}
-            height={300}
-            alt="Mindray"
-            className="w-32 h-10"
-          />
         </div>
         <div className="flex gap-4">
           <button className="px-4 py-3 text-sm font-semibold text-white rounded-xl bg-greenView">
