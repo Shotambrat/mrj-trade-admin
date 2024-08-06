@@ -43,7 +43,7 @@ export default function Catalogitem({ new: isNew, sale, image, title, descriptio
   };
 
   return (
-    <div className="h-[450px] w-full relative">
+    <div className="h-[450px] w-full relative group">
       <div className="border border-neutral-300 rounded-2xl p-4 pt-6 flex flex-col h-full relative">
         <div className="absolute top-2 left-2 flex gap-1">
           {isNew && (
@@ -90,7 +90,7 @@ export default function Catalogitem({ new: isNew, sale, image, title, descriptio
           )}
         </div>
       </div>
-      <div className="absolute bottom-2 right-2 flex gap-2">
+      <div className="absolute bottom-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded-lg"
           onClick={() => setShowEditProductModal(true)}
