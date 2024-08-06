@@ -7,11 +7,13 @@ import fav from "@/public/svg/main/fav.svg";
 import favFilled from "@/public/svg/main/fav-filled.svg";
 import EditProductModal from "./EditProductModal";
 import EditPhotoModal from "./EditPhotoModal";
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
 
 export default function Catalogitem({ new: isNew, sale, image, title, description, price, slug, productId, photoId }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [showEditProductModal, setShowEditProductModal] = useState(false);
   const [showEditPhotoModal, setShowEditPhotoModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -101,10 +103,16 @@ export default function Catalogitem({ new: isNew, sale, image, title, descriptio
         >
           Edit Photo
         </button>
+        <button
+          className="px-4 py-2 bg-red-500 text-white rounded-lg"
+          onClick={() => setShowDeleteModal(true)}
+        >
+          Delete
+        </button>
       </div>
       {showEditProductModal && (
         <EditProductModal
-          productId={productId}
+          slug={slug}
           onClose={() => setShowEditProductModal(false)}
           onSave={(updatedProduct) => {
             // handle save logic
@@ -117,6 +125,12 @@ export default function Catalogitem({ new: isNew, sale, image, title, descriptio
           image={image}
           photoId={photoId}
           onClose={() => setShowEditPhotoModal(false)}
+        />
+      )}
+      {showDeleteModal && (
+        <DeleteConfirmationModal
+          productId={productId}
+          onClose={() => setShowDeleteModal(false)}
         />
       )}
     </div>
