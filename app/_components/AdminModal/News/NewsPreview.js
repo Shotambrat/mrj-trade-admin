@@ -1,21 +1,32 @@
 import { useState } from "react";
 import Image from "next/image";
 import EditBlockModal from "./Modal/EditBlockModal";
+import EditHeadModal from "./Modal/EditHeadModal";
 
 export default function NewsPreview({
-  newGallery,
-  setNewGallery,
   activeNew,
   updateCreatedList,
 }) {
-  const [modal, setModal] = useState(false);
+  const [blockModal, setBlockModal] = useState(false);
+  const [headModal, setHeadModal] = useState(false);
+  const [currentBlockIndex, setCurrentBlockIndex] = useState(null);
 
-  const handleEditClick = () => {
-    setModal(true);
+  const handleEditBlockClick = (index) => {
+    setCurrentBlockIndex(index);
+    setBlockModal(true);
   };
 
-  const handleCloseModal = () => {
-    setModal(false);
+  const handleEditHeadClick = () => {
+    setHeadModal(true);
+  };
+
+  const handleCloseBlockModal = () => {
+    setBlockModal(false);
+    setCurrentBlockIndex(null);
+  };
+
+  const handleCloseHeadModal = () => {
+    setHeadModal(false);
   };
 
   const handleAddBlock = () => {
@@ -37,28 +48,38 @@ export default function NewsPreview({
   return (
     <div className="w-full flex flex-col p-6 overflow-y-scroll no-scrollbar">
       <div className="w-[900px] mx-auto flex gap-12 p-12">
-        {modal && (
+        {blockModal && (
           <EditBlockModal
+            blockIndex={currentBlockIndex}
             activeNew={activeNew}
-            closeModal={handleCloseModal}
+            closeModal={handleCloseBlockModal}
+            updateCreatedList={updateCreatedList}
+          />
+        )}
+        {headModal && (
+          <EditHeadModal
+            activeNew={activeNew}
+            closeModal={handleCloseHeadModal}
             updateCreatedList={updateCreatedList}
           />
         )}
         <div className="flex-1 w-full">
           <h1 className="text-3xl font-semibold">{activeNew.head.title}</h1>
           <p className="text-neutral-400 leading-5 mt-2">{activeNew.head.body}</p>
-          <Image
-            src={newGallery instanceof File ? URL.createObjectURL(newGallery) : newGallery}
-            width={800}
-            height={600}
-            alt="News Image"
-            className="object-contain h-96 w-full border"
-          />
+          {activeNew.head.photo && (
+            <Image
+              src={activeNew.head.photo instanceof File ? URL.createObjectURL(activeNew.head.photo) : activeNew.head.photo}
+              width={800}
+              height={600}
+              alt="News Image"
+              className="object-contain h-96 w-full border"
+            />
+          )}
           <button
             className="mt-4 px-24 py-4 text-sm font-semibold text-white rounded-xl bg-greenView"
-            onClick={handleEditClick}
+            onClick={handleEditHeadClick}
           >
-            Edit
+            Edit Head
           </button>
           <hr className="my-6" />
           <div className="w-full">
@@ -77,9 +98,9 @@ export default function NewsPreview({
                 )}
                 <button
                   className="mt-2 px-12 py-2 text-sm font-semibold text-white rounded-xl bg-greenView"
-                  onClick={() => handleEditClick(index)}
+                  onClick={() => handleEditBlockClick(index)}
                 >
-                  Edit
+                  Edit Block
                 </button>
               </div>
             ))}
@@ -95,5 +116,3 @@ export default function NewsPreview({
     </div>
   );
 }
-
-//NewsPrewiew

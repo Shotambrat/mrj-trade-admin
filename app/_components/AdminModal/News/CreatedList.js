@@ -8,7 +8,6 @@ export default function CreatedList({
   createdList,
   setNewsModal,
   handleSelectNew,
-  newGalleries,
   handleSave,
 }) {
   return (
@@ -32,7 +31,6 @@ export default function CreatedList({
                   <CreatedListItem
                     handleDeleteNew={handleDeleteNew}
                     item={item}
-                    newGallery={newGalleries[item.id] || []}
                   />
                 </div>
               ))
@@ -56,5 +54,3 @@ export default function CreatedList({
     </div>
   );
 }
-
-//Thats it

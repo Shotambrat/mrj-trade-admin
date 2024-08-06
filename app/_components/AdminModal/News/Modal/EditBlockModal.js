@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 
 export default function EditBlockModal({
+  blockIndex,
   activeNew,
   closeModal,
   updateCreatedList,
@@ -11,6 +12,17 @@ export default function EditBlockModal({
   const [text, setText] = useState("");
   const [orderNum, setOrderNum] = useState(0);
   const [photo, setPhoto] = useState(null);
+
+  useEffect(() => {
+    if (blockIndex !== null && activeNew && activeNew.newOptions && activeNew.newOptions.length > blockIndex) {
+      const block = activeNew.newOptions[blockIndex];
+      setHeading(block.heading);
+      setText(block.text);
+      setOrderNum(block.orderNum);
+      setPhoto(block.photo);
+      setCurrentBlock(blockIndex);
+    }
+  }, [blockIndex, activeNew]);
 
   const handleSaveBlock = () => {
     const updatedBlocks = activeNew.newOptions.map((block, index) =>
@@ -29,16 +41,6 @@ export default function EditBlockModal({
   const handlePhotoUpload = (event) => {
     setPhoto(event.target.files[0]);
   };
-
-  useEffect(() => {
-    if (currentBlock !== null) {
-      const block = activeNew.newOptions[currentBlock];
-      setHeading(block.heading);
-      setText(block.text);
-      setOrderNum(block.orderNum);
-      setPhoto(block.photo);
-    }
-  }, [currentBlock]);
 
   return (
     <div className="fixed inset-0 z-[9999] bg-black bg-opacity-50 flex items-center justify-center">

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import NewsPreview from "./NewsPreview";
 import CreatedList from "./CreatedList";
 import DeleteModal from "./Modal/DeleteModal";
+import DefaultImage from "@/public/images/default-image.png";
 
 export default function NewsMain({ setNewsModal }) {
   const [activeId, setActiveId] = useState(null);
@@ -14,20 +15,19 @@ export default function NewsMain({ setNewsModal }) {
     head: {
       title: "News Title",
       body: "News Body",
-      photo: null,
+      photo: DefaultImage,
     },
     newOptions: [
       {
         heading: "Heading",
         text: "Text",
         orderNum: 1,
-        photo: null,
+        photo: DefaultImage,
       }
     ],
   };
 
   const [createdList, setCreatedList] = useState([{ ...emptyNew, id: 1 }]);
-  const [newGalleries, setNewGalleries] = useState({});
 
   useEffect(() => {
     setActiveId(createdList[0]?.id || null);
@@ -72,24 +72,42 @@ export default function NewsMain({ setNewsModal }) {
       const formData = new FormData();
       const newsData = { ...news };
       delete newsData.id;
-      formData.append("json", JSON.stringify(newsData));
-
-      if (newGalleries[news.id]) {
-        newGalleries[news.id].forEach((file) => {
-          formData.append("gallery", file);
-        });
+  
+      // Remove photo fields from the json data
+      const { photo, ...headWithoutPhoto } = newsData.head;
+      const newOptionsWithoutPhotos = newsData.newOptions.map(option => {
+        const { photo, ...optionWithoutPhoto } = option;
+        return optionWithoutPhoto;
+      });
+  
+      const jsonToSend = {
+        ...newsData,
+        head: headWithoutPhoto,
+        newOptions: newOptionsWithoutPhotos
+      };
+  
+      formData.append("json", JSON.stringify(jsonToSend));
+  
+      if (news.head.photo) {
+        formData.append("main-photo", news.head.photo);
       }
-
+  
+      news.newOptions.forEach((option) => {
+        if (option.photo) {
+          formData.append(`block-index-${option.orderNum}`, option.photo);
+        }
+      });
+  
       try {
-        const response = await fetch("http://213.230.91.55:8110/news/create", {
+        const response = await fetch("https://mrjtrade.uz/news/create", {
           method: "POST",
           body: formData,
         });
-
+  
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
+  
         const result = await response.json();
         console.log("News saved successfully:", result);
       } catch (error) {
@@ -111,17 +129,9 @@ export default function NewsMain({ setNewsModal }) {
             createdList={createdList}
             setNewsModal={setNewsModal}
             handleSelectNew={handleSelectNew}
-            newGalleries={newGalleries}
             handleSave={handleSaveNews}
           />
           <NewsPreview
-            newGallery={newGalleries[activeId] || []}
-            setNewGallery={(gallery) =>
-              setNewGalleries({
-                ...newGalleries,
-                [activeId]: gallery,
-              })
-            }
             activeNew={activeNew}
             updateCreatedList={updateCreatedList}
           />
@@ -136,5 +146,3 @@ export default function NewsMain({ setNewsModal }) {
     </div>
   );
 }
-
-//thatsit
