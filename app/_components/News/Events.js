@@ -3,20 +3,20 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import eventImage1 from "@/public/images/news/events/1.png"; 
-import eventImage2 from "@/public/images/news/events/2.png"; 
-import eventImage3 from "@/public/images/news/events/3.png"; 
-import eventImage4 from "@/public/images/news/events/4.png"; 
+import eventImage1 from "@/public/images/news/events/1.png";
+import eventImage2 from "@/public/images/news/events/2.png";
+import eventImage3 from "@/public/images/news/events/3.png";
+import eventImage4 from "@/public/images/news/events/4.png";
 
 import GreenArrow from "@/app/_components/Buttons/GreenArrow";
-import EventCard from "@/app/_components/Events/EventCard"; 
+import EventCard from "@/app/_components/Events/EventCard";
 
 export default function Events() {
   const data = [
     {
       title: "International Medical Equipment Exhibition in Dubai - 2024",
       imageSrc: eventImage1,
-      link: "#", 
+      link: "#",
     },
     {
       title: "Innovation in Medicine: Presentation of the Latest Technologies in Abu Dhabi - 2024",
@@ -33,7 +33,6 @@ export default function Events() {
       imageSrc: eventImage4,
       link: "#",
     },
-    
   ];
 
   const settings = {

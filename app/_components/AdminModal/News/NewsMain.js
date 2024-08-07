@@ -75,8 +75,10 @@ export default function NewsMain({ setNewsModal }) {
 
       // Remove photo fields from the json data
       const { photo, ...headWithoutPhoto } = newsData.head;
+      console.log(headWithoutPhoto)
       const newOptionsWithoutPhotos = newsData.newOptions.map(option => {
         const { photo, ...optionWithoutPhoto } = option;
+        console.log(optionWithoutPhoto)
         return optionWithoutPhoto;
       });
 
@@ -86,7 +88,8 @@ export default function NewsMain({ setNewsModal }) {
         newOptions: newOptionsWithoutPhotos
       };
 
-      console.log(jsonToSend);
+      console.log("JsonTosend", jsonToSend)
+  
       formData.append("json", JSON.stringify(jsonToSend));
 
       if (news.head.photo ) {
