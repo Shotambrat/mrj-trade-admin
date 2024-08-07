@@ -72,42 +72,43 @@ export default function NewsMain({ setNewsModal }) {
       const formData = new FormData();
       const newsData = { ...news };
       delete newsData.id;
-  
+
       // Remove photo fields from the json data
       const { photo, ...headWithoutPhoto } = newsData.head;
       const newOptionsWithoutPhotos = newsData.newOptions.map(option => {
         const { photo, ...optionWithoutPhoto } = option;
         return optionWithoutPhoto;
       });
-  
+
       const jsonToSend = {
         ...newsData,
         head: headWithoutPhoto,
         newOptions: newOptionsWithoutPhotos
       };
-  
+
+      console.log(jsonToSend);
       formData.append("json", JSON.stringify(jsonToSend));
-  
-      if (news.head.photo) {
+
+      if (news.head.photo ) {
         formData.append("main-photo", news.head.photo);
       }
-  
+
       news.newOptions.forEach((option) => {
-        if (option.photo) {
-          formData.append(`block-index-${option.orderNum}`, option.photo);
+        if (option.photo ) {
+          formData.append(`index-block-${option.orderNum}`, option.photo);
         }
       });
-  
+
       try {
         const response = await fetch("https://mrjtrade.uz/news/create", {
           method: "POST",
           body: formData,
         });
-  
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-  
+
         const result = await response.json();
         console.log("News saved successfully:", result);
       } catch (error) {
