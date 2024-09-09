@@ -8,7 +8,6 @@ import Category from "../Modal/Category";
 import ProductsMain from "../AdminModal/Products/ProductsMain";
 import tableCatalog from "@/public/svg/table-catalog.svg";
 
-
 export default function List({ categoryId, category, products, setProducts }) {
   const [categoryModal, setCategoryModal] = useState(false);
   const [productModal, setProductModal] = useState(false);
@@ -84,25 +83,28 @@ export default function List({ categoryId, category, products, setProducts }) {
           />
         </div>
         <div className="w-full grid grid-cols-1 mdl:grid-cols-2 3xl:grid-cols-3 gap-4">
-  {filteredProducts.map((item, index) => (
-    <div key={index}>
-      <Catalogitem
-        new={item.tag.includes("new")}
-        sale={item.discount ? `-${item.discount}%` : null}
-        image={item.photo.url}
-        title={item.name}
-        description={item.shortDescription}
-        price={item.originalPrice ? `${item.originalPrice} y.e` : null}
-        slug={item.slug}
-        productId={item.id}
-        photoId={item.photo.id}
-      />
-    </div>
-  ))}
-  <button onClick={() => setProductModal(true)} className="border-green-500 border-dashed border-4 flex justify-center items-center text-8xl text-green-500 font-bold">
-    +
-  </button>
-</div>
+          {filteredProducts.map((item, index) => (
+            <div key={index}>
+              <Catalogitem
+                new={item.tag.includes("new")}
+                sale={item.discount ? `-${item.discount}%` : null}
+                image={item.photo.url}
+                title={item.name}
+                description={item.shortDescription}
+                price={item.originalPrice ? `${item.originalPrice} y.e` : null}
+                slug={item.slug}
+                productId={item.id}
+                photoId={item.photo.id}
+              />
+            </div>
+          ))}
+          <button
+            onClick={() => setProductModal(true)}
+            className="border-green-500 border-dashed border-4 flex justify-center items-center text-8xl text-green-500 font-bold"
+          >
+            +
+          </button>
+        </div>
       </div>
     </div>
   );

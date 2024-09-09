@@ -153,17 +153,3 @@ const VerticalCarousel = ({ gallery, setGallery }) => {
 };
 
 export default VerticalCarousel;
-// <input
-// type="file"
-// multiple
-// accept="image/*"
-// onChange={handleImageUpload}
-// className="hidden"
-// id="image-upload"
-// />
-// <label
-// htmlFor="image-upload"
-// className="cursor-pointer text-greenView rounded p-4 border-2 border-greenView border-dashed"
-// >
-// +
-// </label>

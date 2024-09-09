@@ -9,7 +9,17 @@ import EditProductModal from "./EditProductModal";
 import EditPhotoModal from "./EditPhotoModal";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 
-export default function Catalogitem({ new: isNew, sale, image, title, description, price, slug, productId, photoId }) {
+export default function Catalogitem({
+  new: isNew,
+  sale,
+  image,
+  title,
+  description,
+  price,
+  slug,
+  productId,
+  photoId,
+}) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [showEditProductModal, setShowEditProductModal] = useState(false);
   const [showEditPhotoModal, setShowEditPhotoModal] = useState(false);
@@ -17,14 +27,14 @@ export default function Catalogitem({ new: isNew, sale, image, title, descriptio
 
   useEffect(() => {
     const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-    setIsFavorite(favorites.some(item => item.slug === slug));
+    setIsFavorite(favorites.some((item) => item.slug === slug));
   }, [slug]);
 
   const handleFavoriteToggle = () => {
     let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
     if (isFavorite) {
-      favorites = favorites.filter(item => item.slug !== slug);
+      favorites = favorites.filter((item) => item.slug !== slug);
     } else {
       favorites.push({ title, description, image, price, slug });
     }
@@ -34,7 +44,7 @@ export default function Catalogitem({ new: isNew, sale, image, title, descriptio
   };
 
   const truncateDescription = (desc, wordLimit) => {
-    const cleanDesc = desc.replace(/\n/g, ' ');
+    const cleanDesc = desc.replace(/\n/g, " ");
     const words = cleanDesc.split(" ");
     if (words.length > wordLimit) {
       return words.slice(0, wordLimit).join(" ") + "...";
@@ -122,8 +132,8 @@ export default function Catalogitem({ new: isNew, sale, image, title, descriptio
       )}
       {showEditPhotoModal && (
         <EditPhotoModal
-          image={image}
-          photoId={photoId}
+          id={productId}
+          slug={slug}
           onClose={() => setShowEditPhotoModal(false)}
         />
       )}
